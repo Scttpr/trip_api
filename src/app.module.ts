@@ -11,7 +11,7 @@ import { UsersModule } from "./users/users.module";
 
 @Module({
   imports: [
-    MongooseModule.forRoot(env.get(EnvironmentVariablesKeys.mongoUri)),
+    MongooseModule.forRoot(env.get(EnvironmentVariablesKeys.mongoUri), { useFindAndModify: false }),
     TripsModule,
     UsersModule,
   ],

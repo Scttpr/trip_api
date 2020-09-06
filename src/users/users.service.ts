@@ -21,4 +21,17 @@ export class UsersService {
     async findAll(): Promise<UserDocument[]> {
         return this.userModel.find().exec();
     }
+
+    async findOne(userId: string): Promise<UserDocument> {
+
+        return this.userModel.findById(userId);
+    }
+
+    async updateOne(userId: string, payload: unknown): Promise<UserDocument> {
+        return this.userModel.findOneAndUpdate({ _id: userId }, payload);
+    }
+
+    async deleteOne(userId: string) {
+        return this.userModel.findOneAndRemove({ _id: userId});
+    }
 }
