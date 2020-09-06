@@ -5,26 +5,38 @@ import * as helmet from 'helmet';
 
 import { AppModule } from './app.module';
 import { setupSwagger } from "./services/swagger";
-import { loadServiceConfig } from "./services/config";
+import { env, EnvironmentVariablesKeys } from './services/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  const { TITLE, DESCRIPTION, PORT, VERSION, MAX_RL, WINDOW_RL } = loadServiceConfig(app);
+  const {
+    windowRl,
+    maxRl,
+    port,
+    title,
+    description,
+    version,
+    nodeEnv
+  } = EnvironmentVariablesKeys;
 
   app.enableCors();
   app.use(helmet());
-  app.use(rateLimit({ windowMs: WINDOW_RL, max: MAX_RL }));
+  app.use(rateLimit({ windowMs: env.get(windowRl), max: env.get(maxRl) }));
 
   setupSwagger(app, {
-    title: TITLE,
-    desc: DESCRIPTION,
-    version: VERSION,
+    title: env.get(title),
+    description: env.get(description),
+    version: env.get(version),
   });
 
-  app.useGlobalPipes(new ValidationPipe())
+  app.useGlobalPipes(new ValidationPipe({
+    whitelist: true,
+    forbidNonWhitelisted: true,
+    disableErrorMessages: env.get(nodeEnv) === 'prod', // to disable in prod
+  }))
 
-  await app.listen(PORT);
+  await app.listen(env.get(port));
 }
 
 bootstrap();

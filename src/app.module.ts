@@ -1,18 +1,19 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
+
+import { env, EnvironmentVariablesKeys } from './services/config';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+
 import { TripsModule } from "./trips/trips.module";
 import { UsersModule } from "./users/users.module";
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
-    MongooseModule.forRoot('mongodb://localhost/nest'),
+    MongooseModule.forRoot(env.get(EnvironmentVariablesKeys.mongoUri)),
     TripsModule,
-    UsersModule
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
