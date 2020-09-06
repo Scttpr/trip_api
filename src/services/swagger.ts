@@ -3,15 +3,17 @@ import { INestApplication } from "@nestjs/common";
 
 interface SwaggerOptions {
   title: string,
-  desc: string,
+  description: string,
   version: string,
 }
 
-export const setupSwagger = (app: INestApplication, { title, desc, version }: SwaggerOptions) => {
+export const setupSwagger = (app: INestApplication, { title, description, version }: SwaggerOptions) => {
   const swaggerDocumentOption = new DocumentBuilder()
     .setTitle(title)
-    .setDescription(desc)
+    .setDescription(description)
     .setVersion(version)
+    .addTag('trips')
+    .addTag('users')
     .build();
 
   const document = SwaggerModule.createDocument(app, swaggerDocumentOption);

@@ -1,19 +1,17 @@
-import { INestApplication } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
+import * as nconf from 'nconf';
 
-enum EnvVars {
-  VERSION = 'VERSION',
-  PORT = 'PORT',
-  TITLE = 'TITLE',
-  DESCRIPTION = 'DESCRIPTION',
-  MONGO_URI = 'MONGO_URI',
-  MAX_RL = 'MAX_RL',
-  WINDOW_RL = "WINDOW_RL",
-}
+const CONFIG_FILE_PATH = './config.json';
 
-type EnvVar = { [key in EnvVars]?: string }
+export const env = nconf.env({ lowerCase: true }).argv().file({ file: CONFIG_FILE_PATH, lowerCase: true });
 
-export const loadServiceConfig = (app: INestApplication): EnvVar => {
-  const configService = app.get(ConfigService);
-  return Object.keys(EnvVars).reduce((acc, key) => ({ ...acc, [key]: configService.get(key) }), {});
+export enum EnvironmentVariablesKeys {
+  nodeEnv = 'node_env',
+  version = 'npm_package_version',
+  title = 'npm_package_name',
+  description = 'npm_package_description',
+  author = 'npm_package_author',
+  port = 'port',
+  mongoUri = 'mongo_uri',
+  maxRl = 'max_rl',
+  windowRl = "window_rl",
 }

@@ -1,0 +1,7 @@
+{
+  "node_env": "dev",
+  "port": 3000,
+  "max_rl": 100,
+  "window_rl": 6000,
+  "mongo_uri": "mongodb://localhost/nest"
+}
